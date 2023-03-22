@@ -5,8 +5,9 @@ const MesaModel = require('../models/MesaModel')
 
 const router = express.Router()
 
-router.get('/mesa', (req, res) => {
-    return res.status(200).send(DB_MESAS)
+router.get('/mesa', async (req, res) => {
+    const mesas = await MesaModel.find()
+    return res.status(200).send(mesas)
     
 })
 
@@ -29,20 +30,26 @@ router.post('/mesa', async (req,res) => {
   
 
 
-router.delete('/mesa/:numero', (req, res) => {
+router.delete('/mesa/:numero', async (req, res) => {
     const numero = req.params.numero;
-    const index = DB_MESAS.findIndex(mesa => mesa.numero == numero)
-    if(index != -1) {
-        DB_MESAS.splice(index, 1)
-        return res.status(200).send('Mesa deletada com sucesso')
-
+    const deletado = await MesaModel.findOneAndDelete({numero: numero})
+    if (!deletado || !deletado._id) {
+        return res.status(404).send('Mesa não existe')
+        
     }
-
+    return res.status(200).send(deletado)
+ 
    
-    return res.status(404).send('Mesa não encontrada')
 })
  
-
+/*router.delete('/mesa/:numero', async (req, res) => {
+    const numero = req.params.numero;
+     await MesaModel.findOneAndRemove({numero: numero})
+    return res.status(200).send()
+ 
+   
+})*/
+ 
 
 
 module.exports = router 
