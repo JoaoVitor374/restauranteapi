@@ -8,7 +8,7 @@ const MesaSchema = new mongoose.Schema({
 
 
     }
-})
+}, {timestamps: true})
 
 const MesaModel = mongoose.model('Mesa', MesaSchema)
 

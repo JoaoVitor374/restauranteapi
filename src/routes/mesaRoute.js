@@ -1,17 +1,16 @@
 const express = require('express')
-const DB_MESAS = require('../db/MesaDB')
 const MesaModel = require('../models/MesaModel')
-
+const autenticar = require('../middleware/Autenticador')
 
 const router = express.Router()
 
-router.get('/mesa', async (req, res) => {
+router.get('/mesa', autenticar(['admin', 'gerente', 'atendente']), async (req, res) => {
     const mesas = await MesaModel.find()
     return res.status(200).send(mesas)
     
 })
 
-router.post('/mesa', async (req,res) => {
+router.post('/mesa',autenticar(['admin', 'gerente']), async (req,res) => {
     
     try {
         const mesaCriada = await MesaModel.create({

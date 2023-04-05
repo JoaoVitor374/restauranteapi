@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 require('./db/mongodb')
 
-
+app.use('/uploads', express.static('uploads'))
 
 app.use (express.json())
 
@@ -19,6 +19,12 @@ app.use(pratoRoute)
 
 const atendenteRoute = require('./routes/atendenteRoute')
 app.use(atendenteRoute)
+
+const pedidoRoute = require('./routes/pedidoRoute')
+app.use(pedidoRoute)
+
+const TokenRoute = require('./routes/TokenRoute')
+app.use(TokenRoute)
 
 const carregarModels = require('./models/index')
 carregarModels()
